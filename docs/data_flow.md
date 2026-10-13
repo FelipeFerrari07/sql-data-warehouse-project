@@ -64,5 +64,32 @@ flowchart LR
 
 Regras detalhadas, com as evidências: [`silver_cleaning_rules.md`](silver_cleaning_rules.md).
 
-## Gold
-_A documentar quando a camada for construída._
+## Gold — Silver → modelo estrela (views)
+
+```mermaid
+flowchart LR
+    subgraph SILVER["Schema silver"]
+        S1["crm_cust_info"]
+        S4["erp_cust_az12"]
+        S5["erp_loc_a101"]
+        S2["crm_prd_info"]
+        S6["erp_px_cat_g1v2"]
+        S3["crm_sales_details"]
+    end
+    subgraph GOLD["Schema gold (views)"]
+        D1["dim_customers"]
+        D2["dim_products"]
+        F["fact_sales"]
+    end
+    S1 -->|"base"| D1
+    S4 -->|"cst_key = cid (nascimento, gênero)"| D1
+    S5 -->|"cst_key = cid (país)"| D1
+    S2 -->|"base (só versão atual)"| D2
+    S6 -->|"cat_id = id (categoria)"| D2
+    S3 -->|"base"| F
+    D2 -->|"prd_key = product_number"| F
+    D1 -->|"cst_id = customer_id"| F
+```
+
+Modelo resultante: [`data_model.md`](data_model.md). Dicionário de colunas: [`data_catalog.md`](data_catalog.md).
+Validação contra o resultado oficial do projeto: [`validation_against_reference.md`](validation_against_reference.md).
