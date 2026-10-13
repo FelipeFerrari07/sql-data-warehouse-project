@@ -40,11 +40,11 @@ Veja o diagrama e a descrição completa em [`docs/data_architecture.md`](docs/d
 ## Como executar (PostgreSQL + pgAdmin 4)
 1. Conectado no banco `postgres`, execute `scripts/init/00_create_database.sql`.
 2. Conectado no banco `data_warehouse`, execute `scripts/init/01_create_schemas.sql`.
-3. **Bronze:** execute `scripts/bronze/ddl_bronze.sql` (cria as 6 tabelas).
+3. **Bronze:** execute `scripts/bronze/ddl_bronze.sql` (cria as 6 tabelas) e `scripts/bronze/proc_load_bronze.sql` (cria a procedure de carga).
 4. Copie a pasta `datasets/` para um local que o serviço do PostgreSQL consiga ler (ex.: `C:/Users/Public/datasets`) e carregue:
-   ```sql
-   CALL bronze.load_bronze('C:/Users/Public/datasets');   -- depois de criar a procedure (scripts/bronze/proc_load_bronze.sql)
-   ```
+```sql
+   CALL bronze.load_bronze('C:/Users/Public/datasets');
+```
 5. Valide a carga com `tests/quality_checks_bronze.sql` (todas as linhas devem retornar `OK`).
 6. **Silver:** execute `scripts/silver/ddl_silver.sql` e `scripts/silver/proc_load_silver.sql`, depois:
    ```sql
@@ -52,6 +52,10 @@ Veja o diagrama e a descrição completa em [`docs/data_architecture.md`](docs/d
    ```
    Valide com `tests/quality_checks_silver.sql` (todas as linhas devem retornar `OK`).
 7. **Gold:** execute `scripts/gold/ddl_gold.sql` (cria as 3 views) e valide com `tests/quality_checks_gold.sql`.
+
+
+> **Refazer do zero:** as views da Gold dependem das tabelas da Silver. Antes de rodar o `ddl_silver.sql` de novo, apague as views:
+> `DROP VIEW IF EXISTS gold.fact_sales; DROP VIEW IF EXISTS gold.dim_products; DROP VIEW IF EXISTS gold.dim_customers;`
 
 ## Documentação
 - [Análise de requisitos](docs/requirements.md)
