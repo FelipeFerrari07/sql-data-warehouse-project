@@ -37,12 +37,18 @@ Veja o diagrama e a descrição completa em [`docs/data_architecture.md`](docs/d
    CALL bronze.load_bronze('C:/Users/Public/datasets');   -- depois de criar a procedure (scripts/bronze/proc_load_bronze.sql)
    ```
 5. Valide a carga com `tests/quality_checks_bronze.sql` (todas as linhas devem retornar `OK`).
-6. Silver e Gold: em desenvolvimento.
+6. **Silver:** execute `scripts/silver/ddl_silver.sql` e `scripts/silver/proc_load_silver.sql`, depois:
+   ```sql
+   CALL silver.load_silver();
+   ```
+   Valide com `tests/quality_checks_silver.sql` (todas as linhas devem retornar `OK`).
+7. Gold: em desenvolvimento.
 
 ## Documentação
 - [Análise de requisitos](docs/requirements.md)
 - [Arquitetura de dados](docs/data_architecture.md)
 - [Convenções de nomes](docs/naming_conventions.md)
+- [Regras de limpeza da Silver](docs/silver_cleaning_rules.md)
 - [Fluxo de dados](docs/data_flow.md)
 
 ## Status
@@ -50,6 +56,6 @@ Veja o diagrama e a descrição completa em [`docs/data_architecture.md`](docs/d
 - [x] Repositório organizado
 - [x] Banco de dados e schemas criados
 - [x] Camada Bronze (DDL, procedure de carga e checagens)
-- [ ] Camada Silver
+- [x] Camada Silver (DDL, procedure de limpeza e checagens)
 - [ ] Camada Gold
 - [ ] README final (fontes de dados, função de cada camada e tabelas da Gold)
