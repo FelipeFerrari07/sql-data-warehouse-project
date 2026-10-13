@@ -31,18 +31,25 @@ Veja o diagrama e a descrição completa em [`docs/data_architecture.md`](docs/d
 ## Como executar (PostgreSQL + pgAdmin 4)
 1. Conectado no banco `postgres`, execute `scripts/init/00_create_database.sql`.
 2. Conectado no banco `data_warehouse`, execute `scripts/init/01_create_schemas.sql`.
-3. Camadas Bronze, Silver e Gold: ver as pastas correspondentes em `scripts/` (em desenvolvimento).
+3. **Bronze:** execute `scripts/bronze/ddl_bronze.sql` (cria as 6 tabelas).
+4. Copie a pasta `datasets/` para um local que o serviço do PostgreSQL consiga ler (ex.: `C:/Users/Public/datasets`) e carregue:
+   ```sql
+   CALL bronze.load_bronze('C:/Users/Public/datasets');   -- depois de criar a procedure (scripts/bronze/proc_load_bronze.sql)
+   ```
+5. Valide a carga com `tests/quality_checks_bronze.sql` (todas as linhas devem retornar `OK`).
+6. Silver e Gold: em desenvolvimento.
 
 ## Documentação
 - [Análise de requisitos](docs/requirements.md)
 - [Arquitetura de dados](docs/data_architecture.md)
 - [Convenções de nomes](docs/naming_conventions.md)
+- [Fluxo de dados](docs/data_flow.md)
 
 ## Status
 - [x] Requisitos, arquitetura e convenções de nomes
 - [x] Repositório organizado
 - [x] Banco de dados e schemas criados
-- [ ] Camada Bronze
+- [x] Camada Bronze (DDL, procedure de carga e checagens)
 - [ ] Camada Silver
 - [ ] Camada Gold
 - [ ] README final (fontes de dados, função de cada camada e tabelas da Gold)
