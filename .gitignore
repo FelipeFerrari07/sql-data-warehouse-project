@@ -1,0 +1,14 @@
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Arquivos temporários e logs
+*.log
+*.tmp
+*.bak
+
+# Credenciais (nunca versionar senhas)
+.env
+*.pgpass
